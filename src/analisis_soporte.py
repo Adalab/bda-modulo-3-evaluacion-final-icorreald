@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy import stats
+from scipy.stats import kruskal
 from scipy.stats import ttest_ind, norm, chi2_contingency, f_oneway
 from sklearn.linear_model import LinearRegression
 
@@ -89,3 +90,20 @@ def test_man_whitney(dataframe, columnas_metricas, grupo_control, grupo_test, co
             print(f"Para la métrica {metrica}, las medianas son diferentes.")
         else:
             print(f"Para la métrica {metrica}, las medianas son iguales.")
+
+    
+    def krustal(lista_grupos):
+        '''grupos: puedes pasar los grupos que quieras'''
+
+        statistic, p_value = kruskal(grupo1, grupo2, grupo3)
+
+        # Imprimir los resultados
+        print("Estadístico de Kruskal-Wallis:", statistic)
+        print("Valor p:", p_value)
+
+        # Interpretar los resultados
+        alpha = 0.05
+        if p_value < alpha:
+            print("Hay diferencias estadísticamente significativas entre los grupos.")
+        else:
+            print("No hay diferencias estadísticamente significativas entre los grupos.")

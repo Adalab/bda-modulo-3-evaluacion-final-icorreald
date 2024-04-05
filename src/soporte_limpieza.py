@@ -44,3 +44,8 @@ def drops(df):
     df.drop(columns=['cancellation month', 'cancellation year'], axis=1, inplace=True)
     df = df.drop(df[(df['education']=='high school or below') & (df['salary'] < 0)].index)
     return df
+
+def nuevo_df(df1, df2, como, donde):
+    df_nuevo = df1.merge(df2, how=como, on=donde)
+    df_nuevo.reset_index(inplace=True)
+    return df_nuevo

@@ -37,3 +37,10 @@ def homog_tablas(lista_df):
     for df in lista_df:
         for columna in df.columns:
             df[columna] = df[columna].apply(unify)
+
+# drop datos que no aportan valor
+def drops(df):
+    df.drop_duplicates(inplace=True)
+    df.drop(columns=['cancellation month', 'cancellation year'], axis=1, inplace=True)
+    df = df.drop(df[(df['education']=='high school or below') & (df['salary'] < 0)].index)
+    return df

@@ -17,21 +17,12 @@ sl.homog_tablas([activity, loyalty])
 # las unimos para crear un únifo df
 df = activity.merge(loyalty, how='left', on='Loyalty Number')
 
-# eliminamos las columnas y filas que no nos aportan datos
-    # columnas
-df.drop(columns=['cancellation month', 'cancellation year'], axis=1, inplace=True)
-
-    # filas
-df = df.drop(df[(df['education']=='high school or below') & (df['salary'] < 0)].index)
-
+# drop datos que no aportan valor
+df = sl.drops(df)
+df['salary'] = df['salary'].apply(lambda x: abs(x))
 #%%
 display(df.head())
-
-
-
-
-
-
-# %%
 print(df.shape)
+# %%
+df.to_csv('fligh-data-clean.csv')
 # %%

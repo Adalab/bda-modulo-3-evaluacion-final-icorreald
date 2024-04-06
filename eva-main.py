@@ -5,8 +5,8 @@ import numpy as np
 
 # LIMPIEZA DE CV
 
-activity = pd.read_csv("Customer Flight Activity.csv", index_col=0)
-loyalty = pd.read_csv("Customer Loyalty History.csv", index_col=0)
+activity = pd.read_csv("csv-archivos/Customer Flight Activity.csv", index_col=0)
+loyalty = pd.read_csv("csv-archivos/Customer Loyalty History.csv", index_col=0)
 
 
 # sondeo general de los datos de nuestros df
@@ -26,7 +26,7 @@ df['salary'] = df['salary'].apply(lambda x: abs(x))
 display(df.head())
 print(df.shape)
 
-df.to_csv('fligh-data-clean.csv')
+df.to_csv('csv-archivos/flight-data-clean.csv')
 
 
 #%%

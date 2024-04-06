@@ -5,6 +5,20 @@ from scipy.stats import kruskal
 from scipy.stats import ttest_ind, norm, chi2_contingency, f_oneway
 from sklearn.linear_model import LinearRegression
 
+def prep_df(df, grupo):
+    if grupo == 'A':
+        df_nuevo = df[['loyalty number', 'flights booked', 'education']]
+        df_nuevo['grupo'] = df_nuevo['education'].apply(lambda x: 'A' if x in ['bachelor', 'college', 'master', 'doctor'] else 'B')
+        df_nuevo['grupo2'] = df_nuevo['education'].apply(lambda x: 'C' if x in ['master', 'doctor'] else 'D')
+        return df_nuevo
+    else:
+        df_nuevo = df[df['flights booked'] > 0][['loyalty number', 'flights booked', 'education']]
+        df_nuevo['grupo'] = df_nuevo['education'].apply(lambda x: 'A' if x in ['bachelor', 'college', 'master', 'doctor'] else 'B')
+        df_nuevo['grupo2'] = df_nuevo['education'].apply(lambda x: 'C' if x in ['master', 'doctor'] else 'D')
+        return df_nuevo
+
+
+
 def normalidad(df, col):
     """
     Evalúa la normalidad de una columna de datos de un DataFrame utilizando la prueba de Shapiro-Wilk.
@@ -50,7 +64,7 @@ def homogeneidad (dataframe, columna, columna_metrica):
     if p_value > 0.05:
         print(f"Para la métrica {columna_metrica} las varianzas son homogéneas entre grupos.")
     else:
-        print(f"Para la métrica {columna_metrica}, las varianzas no son homogéneas entre grupos.")
+        print(f"Para la métrica {columna_metrica} las varianzas no son homogéneas entre grupos.")
 
 
 def test_man_whitney(dataframe, columnas_metricas, grupo_control, grupo_test, columna_grupos = "campaign_name"):
@@ -87,23 +101,27 @@ def test_man_whitney(dataframe, columnas_metricas, grupo_control, grupo_test, co
         u_statistic, p_value = stats.mannwhitneyu(metrica_control, metrica_test)
         
         if p_value < 0.05:
-            print(f"Para la métrica {metrica}, las medianas son diferentes.")
+            print(f"Para la métrica {metrica} las medianas son diferentes.")
         else:
-            print(f"Para la métrica {metrica}, las medianas son iguales.")
+            print(f"Para la métrica {metrica} las medianas son iguales.")
 
     
-    def krustal(lista_grupos):
-        '''grupos: puedes pasar los grupos que quieras'''
 
-        statistic, p_value = kruskal(grupo1, grupo2, grupo3)
+def kruskal_wallis(*args):
+    """
+    Parametros: grupos sobre los que hacer el test
+    
+    No hay returns, sino prints de estadísticos, el p value y la interpretación del test
+    """
+    from scipy.stats import kruskal
+    
+    stat, p_value = kruskal(*args)
+    print("Estadístico de Kruskal-Wallis:", stat)
+    print("Valor p:", p_value)
 
-        # Imprimir los resultados
-        print("Estadístico de Kruskal-Wallis:", statistic)
-        print("Valor p:", p_value)
-
-        # Interpretar los resultados
-        alpha = 0.05
-        if p_value < alpha:
-            print("Hay diferencias estadísticamente significativas entre los grupos.")
-        else:
-            print("No hay diferencias estadísticamente significativas entre los grupos.")
+    # Interpretación de resultados:
+    alpha = 0.05
+    if p_value < alpha:
+        print("Hay diferencias estadísticamente significativas entre los grupos.")
+    else:
+        print("No hay diferencias estadísticamente significativas entre los grupos.")

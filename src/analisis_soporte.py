@@ -18,7 +18,6 @@ def prep_df(df, grupo):
         return df_nuevo
 
 
-
 def normalidad(df, col):
     """
     Evalúa la normalidad de una columna de datos de un DataFrame utilizando la prueba de Shapiro-Wilk.
